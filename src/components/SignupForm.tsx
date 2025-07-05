@@ -2,6 +2,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Checkbox } from './ui/checkbox';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -16,7 +21,6 @@ const SignupForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Accepter n'importe quelle donnée et rediriger vers le chat
     setUser(formData);
     navigate('/chat');
   };
@@ -30,86 +34,98 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-green-400 font-mono flex items-center justify-center p-4">
-      <div className="border-2 border-green-400 bg-gray-900 p-8 w-full max-w-md">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold mb-2">░▒▓ CHAT ZONE ▓▒░</h1>
-          <p className="text-green-300">═══ INSCRIPTION ═══</p>
-        </div>
+    <div className="min-h-screen bg-[#36393f] flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-[#2f3136] border-gray-600">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold text-white">Créer un compte</CardTitle>
+          <CardDescription className="text-gray-300">
+            Rejoignez notre communauté de chat
+          </CardDescription>
+        </CardHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-green-300 mb-1">► NOM D'UTILISATEUR:</label>
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              className="w-full bg-black border border-green-400 text-green-400 p-2 focus:outline-none focus:border-green-300"
-              placeholder="Tapez votre pseudo..."
-            />
-          </div>
-
-          <div>
-            <label className="block text-green-300 mb-1">► MOT DE PASSE:</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full bg-black border border-green-400 text-green-400 p-2 focus:outline-none focus:border-green-300"
-              placeholder="Mot de passe secret..."
-            />
-          </div>
-
-          <div>
-            <label className="block text-green-300 mb-1">► EMAIL:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full bg-black border border-green-400 text-green-400 p-2 focus:outline-none focus:border-green-300"
-              placeholder="votre@email.com"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="flex items-center text-green-300">
-              <input
-                type="checkbox"
-                name="isOver18"
-                checked={formData.isOver18}
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="username" className="text-gray-200">Nom d'utilisateur</Label>
+              <Input
+                id="username"
+                name="username"
+                type="text"
+                value={formData.username}
                 onChange={handleChange}
-                className="mr-2 accent-green-400"
+                className="bg-[#40444b] border-gray-600 text-white placeholder-gray-400"
+                placeholder="Entrez votre nom d'utilisateur"
+                required
               />
-              ► J'ai plus de 18 ans
-            </label>
+            </div>
 
-            <label className="flex items-center text-green-300">
-              <input
-                type="checkbox"
-                name="acceptedTerms"
-                checked={formData.acceptedTerms}
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-gray-200">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
                 onChange={handleChange}
-                className="mr-2 accent-green-400"
+                className="bg-[#40444b] border-gray-600 text-white placeholder-gray-400"
+                placeholder="votre@email.com"
+                required
               />
-              ► J'accepte les conditions d'utilisation
-            </label>
-          </div>
+            </div>
 
-          <button
-            type="submit"
-            className="w-full bg-green-400 text-black font-bold py-3 border-2 border-green-400 hover:bg-green-300 hover:border-green-300 transition-colors"
-          >
-            ═══ ENTRER DANS LE CHAT ═══
-          </button>
-        </form>
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-gray-200">Mot de passe</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="bg-[#40444b] border-gray-600 text-white placeholder-gray-400"
+                placeholder="Entrez votre mot de passe"
+                required
+              />
+            </div>
 
-        <div className="text-center mt-6 text-green-600 text-sm">
-          <p>▓▒░ Bienvenue dans le futur du chat ░▒▓</p>
-        </div>
-      </div>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="isOver18"
+                  name="isOver18"
+                  checked={formData.isOver18}
+                  onCheckedChange={(checked) => 
+                    setFormData(prev => ({ ...prev, isOver18: !!checked }))
+                  }
+                />
+                <Label htmlFor="isOver18" className="text-gray-200 text-sm">
+                  J'ai plus de 18 ans
+                </Label>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="acceptedTerms"
+                  name="acceptedTerms"
+                  checked={formData.acceptedTerms}
+                  onCheckedChange={(checked) => 
+                    setFormData(prev => ({ ...prev, acceptedTerms: !!checked }))
+                  }
+                />
+                <Label htmlFor="acceptedTerms" className="text-gray-200 text-sm">
+                  J'accepte les conditions d'utilisation
+                </Label>
+              </div>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-[#5865f2] hover:bg-[#4752c4] text-white font-medium"
+            >
+              Créer mon compte
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

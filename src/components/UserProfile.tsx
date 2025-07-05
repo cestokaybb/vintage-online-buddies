@@ -2,6 +2,12 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Separator } from './ui/separator';
+import { ArrowLeft, Edit2, Save, X } from 'lucide-react';
 
 const UserProfile = () => {
   const { username } = useParams<{ username: string }>();
@@ -16,7 +22,6 @@ const UserProfile = () => {
 
   const isOwnProfile = user?.username === username;
   
-  // Données factices pour les autres utilisateurs
   const userData = isOwnProfile ? user : {
     username: username,
     email: `${username}@example.com`,
@@ -43,156 +48,164 @@ const UserProfile = () => {
     }));
   };
 
+  const handleCancel = () => {
+    setEditData({
+      username: user?.username || '',
+      email: user?.email || '',
+      password: user?.password || ''
+    });
+    setIsEditing(false);
+  };
+
   if (!user) {
     navigate('/');
     return null;
   }
 
   return (
-    <div className="min-h-screen bg-black text-green-400 font-mono p-4">
+    <div className="min-h-screen bg-[#36393f] p-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="border-2 border-green-400 bg-gray-900 p-6 mb-4">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold">░▒▓ PROFIL UTILISATEUR ▓▒░</h1>
-            <button
-              onClick={() => navigate('/chat')}
-              className="bg-gray-800 border border-green-400 px-4 py-2 hover:bg-gray-700 transition-colors"
-            >
-              ◄ RETOUR AU CHAT
-            </button>
-          </div>
-          <p className="text-green-300">═══ Informations de {userData?.username} ═══</p>
+        <div className="flex items-center gap-4 mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/chat')}
+            className="text-gray-400 hover:text-white"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Retour au chat
+          </Button>
         </div>
 
-        {/* Profile Info */}
-        <div className="border-2 border-green-400 bg-gray-900 p-6">
-          {/* Avatar ASCII */}
-          <div className="text-center mb-6">
-            <pre className="text-green-300 text-sm">
-{`    ████████
-  ██░░░░░░░░██
-██░░░░░░░░░░░░██
-██░░██░░░░██░░██
-██░░░░░░░░░░░░██
-██░░░░████░░░░██
-  ██░░░░░░░░██
-    ████████`}
-            </pre>
-            <p className="text-green-400 font-bold mt-2">&lt;{userData?.username}&gt;</p>
-          </div>
+        {/* Profile Card */}
+        <Card className="bg-[#2f3136] border-gray-600">
+          <CardHeader className="text-center">
+            <div className="w-24 h-24 bg-[#5865f2] rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4">
+              {userData?.username?.charAt(0).toUpperCase()}
+            </div>
+            <CardTitle className="text-white text-2xl">{userData?.username}</CardTitle>
+            <CardDescription className="text-gray-300">
+              {isOwnProfile ? 'Votre profil' : 'Profil utilisateur'}
+            </CardDescription>
+          </CardHeader>
 
-          {/* User Details */}
-          <div className="space-y-4">
-            <div className="border border-green-600 p-4">
-              <h3 className="text-green-300 font-bold mb-3">► INFORMATIONS GÉNÉRALES</h3>
+          <CardContent className="space-y-6">
+            {/* User Information */}
+            <div>
+              <h3 className="text-white font-semibold mb-4 flex items-center">
+                Informations personnelles
+                {isOwnProfile && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsEditing(!isEditing)}
+                    className="ml-auto text-gray-400 hover:text-white"
+                  >
+                    {isEditing ? <X className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
+                  </Button>
+                )}
+              </h3>
               
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
-                  <label className="text-green-400">Nom d'utilisateur:</label>
+                  <Label className="text-gray-300">Nom d'utilisateur</Label>
                   {isOwnProfile && isEditing ? (
-                    <input
-                      type="text"
+                    <Input
                       name="username"
                       value={editData.username}
                       onChange={handleChange}
-                      className="ml-2 bg-black border border-green-400 text-green-400 p-1 focus:outline-none focus:border-green-300"
+                      className="mt-1 bg-[#40444b] border-gray-600 text-white"
                     />
                   ) : (
-                    <span className="ml-2 text-green-100">{userData?.username}</span>
+                    <div className="mt-1 p-2 bg-[#40444b] rounded text-white">
+                      {userData?.username}
+                    </div>
                   )}
                 </div>
 
                 <div>
-                  <label className="text-green-400">Email:</label>
+                  <Label className="text-gray-300">Email</Label>
                   {isOwnProfile && isEditing ? (
-                    <input
-                      type="email"
+                    <Input
                       name="email"
+                      type="email"
                       value={editData.email}
                       onChange={handleChange}
-                      className="ml-2 bg-black border border-green-400 text-green-400 p-1 focus:outline-none focus:border-green-300"
+                      className="mt-1 bg-[#40444b] border-gray-600 text-white"
                     />
                   ) : (
-                    <span className="ml-2 text-green-100">{userData?.email}</span>
+                    <div className="mt-1 p-2 bg-[#40444b] rounded text-white">
+                      {userData?.email}
+                    </div>
                   )}
                 </div>
 
                 {isOwnProfile && (
                   <div>
-                    <label className="text-green-400">Mot de passe:</label>
+                    <Label className="text-gray-300">Mot de passe</Label>
                     {isEditing ? (
-                      <input
-                        type="password"
+                      <Input
                         name="password"
+                        type="password"
                         value={editData.password}
                         onChange={handleChange}
-                        className="ml-2 bg-black border border-green-400 text-green-400 p-1 focus:outline-none focus:border-green-300"
+                        className="mt-1 bg-[#40444b] border-gray-600 text-white"
                       />
                     ) : (
-                      <span className="ml-2 text-green-100">********</span>
+                      <div className="mt-1 p-2 bg-[#40444b] rounded text-white">
+                        ••••••••
+                      </div>
                     )}
                   </div>
                 )}
               </div>
-            </div>
 
-            <div className="border border-green-600 p-4">
-              <h3 className="text-green-300 font-bold mb-3">► STATISTIQUES</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-green-400">Messages envoyés:</span>
-                  <span className="ml-2 text-green-100">1337</span>
-                </div>
-                <div>
-                  <span className="text-green-400">Membre depuis:</span>
-                  <span className="ml-2 text-green-100">2024</span>
-                </div>
-                <div>
-                  <span className="text-green-400">Dernière connexion:</span>
-                  <span className="ml-2 text-green-100">Maintenant</span>
-                </div>
-                <div>
-                  <span className="text-green-400">Statut:</span>
-                  <span className="ml-2 text-green-100">● En ligne</span>
-                </div>
-              </div>
-            </div>
-
-            {isOwnProfile && (
-              <div className="flex gap-4 mt-6">
-                {isEditing ? (
-                  <>
-                    <button
-                      onClick={handleSaveChanges}
-                      className="bg-green-400 text-black font-bold px-6 py-3 border-2 border-green-400 hover:bg-green-300 hover:border-green-300 transition-colors"
-                    >
-                      ═══ SAUVEGARDER ═══
-                    </button>
-                    <button
-                      onClick={() => setIsEditing(false)}
-                      className="bg-red-900 border border-red-400 text-red-400 px-6 py-3 hover:bg-red-800 transition-colors"
-                    >
-                      ═══ ANNULER ═══
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="bg-yellow-600 text-black font-bold px-6 py-3 border-2 border-yellow-400 hover:bg-yellow-500 hover:border-yellow-300 transition-colors"
+              {isOwnProfile && isEditing && (
+                <div className="flex gap-2 mt-4">
+                  <Button
+                    onClick={handleSaveChanges}
+                    className="bg-[#5865f2] hover:bg-[#4752c4] text-white"
                   >
-                    ═══ MODIFIER ═══
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
+                    <Save className="w-4 h-4 mr-2" />
+                    Sauvegarder
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleCancel}
+                    className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  >
+                    Annuler
+                  </Button>
+                </div>
+              )}
+            </div>
 
-        {/* Footer */}
-        <div className="text-center mt-6 text-green-600 text-sm">
-          <p>▓▒░ Profil généré automatiquement ░▒▓</p>
-        </div>
+            <Separator className="bg-gray-600" />
+
+            {/* Statistics */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Statistiques</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#40444b] p-3 rounded">
+                  <div className="text-2xl font-bold text-white">1,337</div>
+                  <div className="text-gray-400 text-sm">Messages envoyés</div>
+                </div>
+                <div className="bg-[#40444b] p-3 rounded">
+                  <div className="text-2xl font-bold text-green-400">En ligne</div>
+                  <div className="text-gray-400 text-sm">Statut</div>
+                </div>
+                <div className="bg-[#40444b] p-3 rounded">
+                  <div className="text-2xl font-bold text-white">2024</div>
+                  <div className="text-gray-400 text-sm">Membre depuis</div>
+                </div>
+                <div className="bg-[#40444b] p-3 rounded">
+                  <div className="text-2xl font-bold text-white">Maintenant</div>
+                  <div className="text-gray-400 text-sm">Dernière activité</div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

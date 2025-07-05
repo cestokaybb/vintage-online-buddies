@@ -7,6 +7,7 @@ interface User {
   password: string;
   isOver18: boolean;
   acceptedTerms: boolean;
+  avatar?: string;
 }
 
 interface UserContextType {
