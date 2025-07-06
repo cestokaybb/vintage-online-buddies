@@ -6,7 +6,6 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Separator } from './ui/separator';
 import { ArrowLeft, Edit2, Save, X } from 'lucide-react';
 
 const UserProfile = () => {
@@ -178,31 +177,6 @@ const UserProfile = () => {
                   </Button>
                 </div>
               )}
-            </div>
-
-            <Separator className="bg-gray-600" />
-
-            {/* Statistics */}
-            <div>
-              <h3 className="text-white font-semibold mb-4">Statistiques</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#40444b] p-3 rounded">
-                  <div className="text-2xl font-bold text-white">1,337</div>
-                  <div className="text-gray-400 text-sm">Messages envoyés</div>
-                </div>
-                <div className="bg-[#40444b] p-3 rounded">
-                  <div className="text-2xl font-bold text-green-400">En ligne</div>
-                  <div className="text-gray-400 text-sm">Statut</div>
-                </div>
-                <div className="bg-[#40444b] p-3 rounded">
-                  <div className="text-2xl font-bold text-white">2024</div>
-                  <div className="text-gray-400 text-sm">Membre depuis</div>
-                </div>
-                <div className="bg-[#40444b] p-3 rounded">
-                  <div className="text-2xl font-bold text-white">Maintenant</div>
-                  <div className="text-gray-400 text-sm">Dernière activité</div>
-                </div>
-              </div>
             </div>
           </CardContent>
         </Card>
